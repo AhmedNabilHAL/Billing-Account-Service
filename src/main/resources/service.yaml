@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: Billing Account Service
+  description: |-
+    A billing account service built with spring boot.
+  contact:
+    email: anabilsalah@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1-SNAPSHOT
+# servers:
+#   - url:
+tags:
+  - name: subscriber
+    description: Everything about your Subscriber
+paths:
+  /vois/internship-program/v1/{ban}/subscribers:
+    get:
+      tags:
+        - subscriber
+      summary: Retrive subscirbers for a specific ban (billing account)
+      description: Get all subscribers for a specific ban
+      operationId: getSubscribers
+      parameters:
+        - name: ban
+          in: path
+          description: ID of billing account
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+        '400':
+          description: Bad request, parameter ban contains non-numeric characters or contains less than 9 numbers
+
+  /vois/internship-program/v1/{ban}.{subscriber}:
+    get:
+      tags:
+        - subscriber
+      summary: Retrive a single subscirber with a specific ban (billing account)
+      description: Get the subscriber with a specific ban
+      operationId: getSubscriber
+      parameters:
+        - name: ban
+          in: path
+          description: ID of billing account
+          required: true
+          schema:
+            type: string
+        - name: subscriber
+          in: path
+          description: ID of subscriber
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+        '400':
+          description: Bad request, parameter ban contains non-numeric characters or contains less than 9 numbers
+        '401':
+          description: Unauthorized, subscriber found but ban is not related to the subscriber
+        '404':
+          description: Not found, subscriber's not found
+
+  /vois/internship-program/v1/subscriber:
+    post:
+      tags:
+        - subscriber
+      summary: Create a new subscriber
+      description: Create a new subscriber
+      operationId: createSubscriber
+      requestBody:
+        description: Created subscriber object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+        '400':
+          description: Bad request, possible reasons include invalid ban, invalid username (starts with a non-alphabet character), invalid email (incorrect format), invalid phone
+        '403':
+          description: Forbidden, subscriber already exists (duplicate username or email)
+
+
+components:
+  schemas:
+    Subscriber:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '5fe3748e57a1300ce44fce1a'
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        passwordHash:
+          type: string
+          example: 'qiyh4XPJGsOZ2MEAyLkfWqeQ'
+        phone:
+          type: string
+          example: '01224738659'
+        ban:
+          type: string
+          example: '100210001'
+      xml:
+        name: subscriber
+  requestBodies:
+    Subscriber:
+      description: Subscriber object that needs to be added.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Subscriber'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Subscriber'
