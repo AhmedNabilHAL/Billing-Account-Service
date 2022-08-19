@@ -40,6 +40,7 @@ public class SubscriberService {
         String emailRe = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         emailPattern = Pattern.compile(emailRe);
     }
+
     /**
      * verifies if the ban is valid
      * @param ban
@@ -112,7 +113,7 @@ public class SubscriberService {
                 ()-> new SubscriberNotFoundException(subscriberId)
         );
 
-        if (subscriber.getBan().equalsIgnoreCase(ban)) throw new UnrelatedBanException(subscriberId, ban);
+        if (!subscriber.getBan().equalsIgnoreCase(ban)) throw new UnrelatedBanException(subscriberId, ban);
 
         return subscriber;
     }
@@ -129,11 +130,14 @@ public class SubscriberService {
         verifyEmail(subscriber.getEmail());
         verifyPhone(subscriber.getPhone());
 
-        if (subscriberRepository.findById(subscriber.getId()).isPresent())
+        if (subscriber.getId() != null && subscriberRepository.findById(subscriber.getId()).isPresent())
             throw new SubscriberExistsException("subscriber id", subscriber.getId());
 
         if (subscriberRepository.findItemByUsername(subscriber.getUsername()).isPresent())
             throw new SubscriberExistsException("username", subscriber.getUsername());
+
+        if (subscriberRepository.findItemByEmail(subscriber.getEmail()).isPresent())
+            throw new SubscriberExistsException("email", subscriber.getEmail());
 
         return subscriberRepository.save(subscriber);
     }

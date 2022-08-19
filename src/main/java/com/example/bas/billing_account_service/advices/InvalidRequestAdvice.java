@@ -1,6 +1,6 @@
 package com.example.bas.billing_account_service.advices;
 
-import com.example.bas.billing_account_service.exceptions.UnrelatedBanException;
+import com.example.bas.billing_account_service.exceptions.InvalidRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InvalidRequestAdvice {
 
     @ResponseBody
-    @ExceptionHandler(UnrelatedBanException.class)
+    @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String invalidRequestHandler(UnrelatedBanException ex) {
+    String invalidRequestHandler(InvalidRequestException ex) {
         return ex.getMessage();
     }
 }

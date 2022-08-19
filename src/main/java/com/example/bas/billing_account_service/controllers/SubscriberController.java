@@ -32,4 +32,10 @@ public class SubscriberController {
         return subscriberService.createSubscriber(subscriber);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NullPointerException.class)
+    public String missingValue(NullPointerException ex) {
+        return ex.getMessage();
+    }
 }

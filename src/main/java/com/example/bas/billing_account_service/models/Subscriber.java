@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 /**
  * This class is used to model a subscriber in our database
  */
@@ -14,6 +16,8 @@ public class Subscriber {
 
     @Indexed
     private String username;
+
+    private String passwordHash;
 
     private String firstName;
 
@@ -27,13 +31,22 @@ public class Subscriber {
     @Indexed
     private String ban;
 
-    public Subscriber(String username, String firstName, String lastName, String email, String phone, String ban) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-        this.ban = ban;
+    public Subscriber(String username, String passwordHash, String firstName, String lastName, String email, String phone, String ban) {
+        this.username = Objects.requireNonNull(username, "username is missing");
+        this.passwordHash = Objects.requireNonNull(passwordHash, "passwordHash is missing");
+        this.firstName = Objects.requireNonNull(firstName, "firstName is missing");
+        this.lastName = Objects.requireNonNull(lastName, "lastName is missing");
+        this.email = Objects.requireNonNull(email, "email is missing");
+        this.phone = Objects.requireNonNull(phone, "phone is missing");
+        this.ban = Objects.requireNonNull(ban, "ban is missing");
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getId() {
