@@ -12,12 +12,28 @@ import java.util.List;
  */
 @RepositoryRestResource(exported = false)
 public interface SubscriberRepository extends MongoRepository<Subscriber, String> {
+
+    /**
+     * searches for a subscriber with a certain username
+     * @param username unique username for subscriber
+     * @return subscriber with the given username
+     */
     @Query("{username:'?0'}")
     Subscriber findItemByUsername(String username);
 
+    /**
+     * searches for a subscriber with a certain username
+     * @param email unique email for subscriber
+     * @return subscriber with the given email
+     */
     @Query("{email:'?0'}")
     Subscriber findItemByEmail(String email);
 
+    /**
+     * searches for all subscribers with a certain billing account number
+     * @param ban billing account number
+     * @return a list of subscribers
+     */
     @Query("{ban:'?0'}")
     List<Subscriber> findItemsByBan(String ban);
 }
