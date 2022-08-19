@@ -113,7 +113,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscriber'
         '400':
-          description: Bad request, possible reasons include invalid ban, invalid username (starts with a non-alphabet character), invalid email (incorrect format), invalid phone
+          description: Bad request, possible reasons include invalid ban, invalid username, invalid email (incorrect format), invalid phone
         '403':
           description: Forbidden, subscriber already exists (duplicate username or email)
 
