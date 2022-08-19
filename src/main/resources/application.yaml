@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: "dev"
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      port: 0
+      database: test
+  mongodb:
+    embedded:
+      version: 4.0.21
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: "${MONGODB_URI}"
+      database: "${MONGODB_DATABASE}"
