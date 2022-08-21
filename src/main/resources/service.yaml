@@ -35,14 +35,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/CollectionModelItem'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/CollectionModelItem'
         '400':
           description: Bad request, parameter ban contains non-numeric characters or contains less than 9 numbers
 
@@ -72,10 +68,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/Item'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/Item'
         '400':
           description: Bad request, parameter ban contains non-numeric characters or contains less than 9 numbers
         '401':
@@ -95,23 +91,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Subscriber'
+              $ref: '#/components/schemas/SubscriberRequest'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Subscriber'
+              $ref: '#/components/schemas/SubscriberRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Subscriber'
+              $ref: '#/components/schemas/SubscriberRequest'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/Item'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Subscriber'
+                $ref: '#/components/schemas/Item'
         '400':
           description: Bad request, possible reasons include invalid ban, invalid username, invalid email (incorrect format), invalid phone
         '403':
@@ -120,6 +116,49 @@ paths:
 
 components:
   schemas:
+    CollectionModelItem:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            subscribers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Item'
+        _links:
+          $ref: '#/components/schemas/OrphanedLinks'
+    Item:
+      type: object
+      properties:
+        subscriber:
+          $ref: '#/components/schemas/Subscriber'
+        _links:
+          $ref: '#/components/schemas/Links'
+    OrphanedLinks:
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: 'http://localhost:8080/vois/internship-program/v1/100010001/subscribers'
+    Links:
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: 'http://localhost:8080/vois/internship-program/v1/100010001.5fe3748e57a1300ce44fce1a'
+        subscribers:
+          type: object
+          properties:
+            href:
+              type: string
+              example: 'http://localhost:8080/vois/internship-program/v1/100010001/subscribers'
     Subscriber:
       type: object
       properties:
@@ -146,16 +185,32 @@ components:
           example: '01224738659'
         ban:
           type: string
-          example: '100210001'
+          example: '100010001'
       xml:
         name: subscriber
-  requestBodies:
-    Subscriber:
-      description: Subscriber object that needs to be added.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Subscriber'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Subscriber'
+    SubscriberRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        passwordHash:
+          type: string
+          example: 'qiyh4XPJGsOZ2MEAyLkfWqeQ'
+        phone:
+          type: string
+          example: '01224738659'
+        ban:
+          type: string
+          example: '100010001'
+      xml:
+        name: subscriber
