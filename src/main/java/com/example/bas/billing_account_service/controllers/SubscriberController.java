@@ -2,7 +2,9 @@ package com.example.bas.billing_account_service.controllers;
 
 import com.example.bas.billing_account_service.models.Subscriber;
 import com.example.bas.billing_account_service.services.SubscriberService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -37,8 +39,8 @@ public class SubscriberController {
 
     @GetMapping("/{ban}.{subscriber}")
     EntityModel<Subscriber> getSubscriber(@PathVariable(value = "ban") String ban, @PathVariable(value = "subscriber") String subscriberId) {
-
-        return EntityModel.of(subscriberService.getSubscriber(ban, subscriberId), //
+        Subscriber subscriber = subscriberService.getSubscriber(ban, subscriberId);
+        return EntityModel.of(subscriber, //
                 WebMvcLinkBuilder.linkTo(methodOn(SubscriberController.class).getSubscriber(ban, subscriberId)).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(methodOn(SubscriberController.class).getSubscribers(ban)).withRel("subscribers"));
     }
